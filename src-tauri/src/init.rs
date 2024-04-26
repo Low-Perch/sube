@@ -13,7 +13,7 @@ pub fn setup<'a>(app: &'a mut tauri::App) -> Result<(), Box<dyn Error>> {
         tauri::webview::WebviewBuilder::new("panel", WebviewUrl::App(Default::default()))
           .auto_resize(),
         LogicalPosition::new(0., 0.),
-        LogicalSize::new(50., height),
+        LogicalSize::new(25., height),
     )?;
 
     let _webview2 = window.add_child(
@@ -22,8 +22,8 @@ pub fn setup<'a>(app: &'a mut tauri::App) -> Result<(), Box<dyn Error>> {
           WebviewUrl::External("https://github.com".parse().unwrap()),
         )
         .auto_resize(),
-        LogicalPosition::new(50., 0.),
-        LogicalSize::new(width - 50., height),
+        LogicalPosition::new(25., 0.),
+        LogicalSize::new(width - 25., height),
     )?;
 
     Ok(())
