@@ -1,20 +1,26 @@
 use std::error::Error;
-use tauri::{App, LogicalPosition, LogicalSize, WebviewUrl, Window, WindowEvent, Manager, Webview};
+use tauri::{App, Error as TauriError, LogicalPosition, LogicalSize, WebviewUrl, Url, Window, WindowEvent, Manager, Webview};
 
 const WIDTH: f64 = 900.;
 const HEIGHT: f64 = 600.;
 const PANEL_SIZE_POSITION: f64 = 36.;
 
-fn create_window(app: &App) -> Result<Window, tauri::Error> {
+fn create_window(app: &App) -> Result<Window, TauriError> {
     tauri::window::WindowBuilder::new(app, "main")
         .inner_size(WIDTH, HEIGHT)
         .min_inner_size(WIDTH, HEIGHT)
         .build()
 }
 
-fn create_webview(window: &Window, label: &str, start_position: f64, width: f64) -> Result<Webview, tauri::Error> {
+fn create_webview(window: &Window, label: &str, start_position: f64, width: f64) -> Result<Webview, TauriError> {
+    let url = match label {
+        "panel" => WebviewUrl::App(Default::default()),
+        _ => WebviewUrl::External(Url::parse("https://google.com").unwrap())
+    };
+
     window.add_child(
-        tauri::webview::WebviewBuilder::new(label, WebviewUrl::App(Default::default()))
+        tauri::webview::WebviewBuilder::new(label, url)
+            // TODO: need to be able to select user_agent based on OS
         .user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15"),
         LogicalPosition::new(start_position, 0.),
         LogicalSize::new(width, HEIGHT),
