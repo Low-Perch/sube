@@ -21,6 +21,7 @@ pub fn setup<'a>(app: &'a mut tauri::App) -> Result<(), Box<dyn Error>> {
           "portal",
           WebviewUrl::External("https://github.com".parse().unwrap()),
         )
+        .user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15")
         .auto_resize(),
         LogicalPosition::new(36., 0.),
         LogicalSize::new(width - 36., height),
