@@ -4,12 +4,25 @@
     import { invoke } from '@tauri-apps/api/core'
 
     type Site = { id: string, ico: string, url: string }
+    const baseFaviconURL = `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&url=https://github.com&size=32`
 
     let sites: Site[] = [
         {
-            id: "twitter",
-            url: "https://twitter.com",
-            ico: 'https://icons.duckduckgo.com/ip3/twitter.com.ico'
+
+            id: "google",
+            url: "https://google.com",
+            ico: 'https://icons.duckduckgo.com/ip3/google.com.ico'
+        },
+        {
+
+            id: "github",
+            url: "https://github.com",
+            ico: 'https://icons.duckduckgo.com/ip3/github.com.ico'
+        },
+        {
+            id: "spotify",
+            url: "https://open.spotify.com",
+            ico: 'https://icons.duckduckgo.com/ip3/spotify.com.ico'
         },
         {
             id: "tauri",
@@ -22,13 +35,6 @@
             ico: 'https://icons.duckduckgo.com/ip3/mail.google.com.ico'
         },
         {
-
-            id: "github",
-            url: "https://github.com",
-            ico: 'https://icons.duckduckgo.com/ip3/github.com.ico'
-        },
-        {
-
             id: "youtube",
             url: "https://youtube.com",
             ico: 'https://icons.duckduckgo.com/ip3/youtube.com.ico'
@@ -65,7 +71,7 @@
                     on:click={setActionTab}
                     class="inline-flex ml-2 justify-center items-center"
                 >
-                    <img class="w-5 h-5 grayscale brightness-[100]" src={site.ico} />
+                    <img class="w-5 h-5 bg-transparent" src={site.ico} />
                     <label for={site.id} class="text-xs hidden">{site.id}</label>
                 </button>
             </li>
