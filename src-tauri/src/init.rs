@@ -29,3 +29,26 @@ pub fn setup<'a>(app: &'a mut tauri::App) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
+pub fn window_events(window: &Window, event: &WindowEvent) {
+    let panel = window.get_webview("panel").unwrap();
+    let portal = window.get_webview("portal").unwrap();
+
+    match event {
+        WindowEvent::Resized(dimensions) => {
+            panel.set_size(LogicalSize { width: 36., height: dimensions.height.into() }).unwrap();
+            portal.set_size(LogicalSize { width: dimensions.width as f64 - 36., height: dimensions.height as f64 }).unwrap();
+        }
+        WindowEvent::ScaleFactorChanged { scale_factor, new_inner_size, .. } => {
+            panel.set_size(LogicalSize { 
+                width: 36., 
+                height: (new_inner_size.height as f64 / scale_factor) as f64
+            }).unwrap();
+            portal.set_size(LogicalSize { 
+                width: new_inner_size.width as f64 / scale_factor - 36.,
+                height: new_inner_size.height  as f64 / scale_factor
+            }).unwrap();
+        }
+        _ => {}
+    };
+}
