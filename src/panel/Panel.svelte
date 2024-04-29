@@ -11,13 +11,11 @@
             ico: '&#x2b;'
         },
         {
-
             id: "google",
             url: "https://google.com",
             ico: 'https://icons.duckduckgo.com/ip3/google.com.ico'
         },
         {
-
             id: "github",
             url: "https://github.com",
             ico: 'https://icons.duckduckgo.com/ip3/github.com.ico'
