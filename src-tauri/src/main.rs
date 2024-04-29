@@ -2,8 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod cmd;
-mod init;
 mod config;
+mod init;
 
 fn main() {
     tauri::Builder::default()

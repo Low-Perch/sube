@@ -36,10 +36,9 @@ pub fn create_webview(
     let user_agent = config.user_agent.get();
 
     window.add_child(
-        tauri::webview::WebviewBuilder::new(label, url)
-        .user_agent(user_agent),
+        tauri::webview::WebviewBuilder::new(label, url).user_agent(user_agent),
         position,
-        size
+        size,
     )
 }
 
@@ -47,7 +46,7 @@ pub fn setup(app: &mut App) -> Result<(), Box<dyn Error>> {
     let config = Config::get_config();
     let window = create_window(app, &config)?;
 
-    let window_cfg = &config.window; 
+    let window_cfg = &config.window;
     create_webview(
         &window,
         PANEL,
@@ -97,7 +96,7 @@ pub fn window_events(window: &Window, event: &WindowEvent) {
         } => {
             panel
                 .set_size(LogicalSize {
-                    width:  panel_size,
+                    width: panel_size,
                     height: (new_inner_size.height as f64 / scale_factor),
                 })
                 .unwrap();
