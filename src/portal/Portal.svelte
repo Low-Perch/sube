@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { invoke } from '@tauri-apps/api/core'
+
     type Site = { id: string, ico: string, url: string }
 
     let sites: Site[] = [
@@ -38,6 +40,11 @@
             ico: 'https://icons.duckduckgo.com/ip3/youtube.com.ico'
         },
     ]
+
+    async function setActionTab(e: MouseEvent) {
+        const button = e.currentTarget as HTMLButtonElement;
+        await invoke('set_webview_url', { url: button.value })
+    }
 </script>
 
 <main class="flex-col h-dvh justify-center mx-auto bg-gray-800 p-20">
@@ -55,12 +62,12 @@
 
         <h2 class="text-slate-100 text-xl mt-10">Favourites</h2>
 
-        <div class="flex flex-wrap justify-center gap-4 my-10 mx-auto">
+        <div class="flex flex-wrap gap-4 my-10 mx-auto">
             {#each sites as site (site.id)}
                 <button 
                     name={site.id}
                     value={site.url}
-                    on:click={() => {}}
+                    on:click={setActionTab}
                     class="flex flex-col bg-slate-400 rounded-md place-content-center justify-center items-center gap-2 w-20 h-20"
                 >
                     {#if site.ico.startsWith('https')}
