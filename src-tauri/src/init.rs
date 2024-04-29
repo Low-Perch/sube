@@ -17,7 +17,7 @@ fn create_window(app: &App) -> Result<Window, TauriError> {
 
 pub fn create_webview(window: &Window, label: &str, start_position: f64, size: LogicalSize<f64>) -> Result<Webview, TauriError> {
     let url = match label {
-        "panel" => WebviewUrl::App(Default::default()),
+        "panel" => WebviewUrl::App("../../panel.html".into()),
         _ => WebviewUrl::App("../../portal.html".into())
     };
 
