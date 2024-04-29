@@ -1,12 +1,15 @@
 <script lang="ts">
-    import { onMount } from 'svelte'
     import { writable } from 'svelte/store'
     import { invoke } from '@tauri-apps/api/core'
 
     type Site = { id: string, ico: string, url: string }
-    const baseFaviconURL = `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&url=https://github.com&size=32`
 
     let sites: Site[] = [
+        {
+            id: "home",
+            url: "../../panel.html",
+            ico: '&#x2b;'
+        },
         {
 
             id: "google",
@@ -50,11 +53,6 @@
         const site = sites.find(({ id }) => id == button.name)
         site && activeTab.set(site)
     }
-
-    onMount(async () => {
-        await invoke('set_webview_url', { url: $activeTab.url })
-    })
-
 </script>
 
 <main class="fixed h-full w-full justify-center items-center py-2">
@@ -71,7 +69,11 @@
                     on:click={setActionTab}
                     class="inline-flex ml-2 justify-center items-center"
                 >
-                    <img class="w-5 h-5 bg-transparent" src={site.ico} />
+                    {#if site.ico.startsWith('https')}
+                        <img class="w-5 h-5 bg-transparent" src={site.ico} />
+                    {:else}
+                        <span class="flex relative -top-2.5 item-center w-5 h-5 text-3xl text-white">{@html site.ico}</span>
+                    {/if}
                     <label for={site.id} class="text-xs hidden">{site.id}</label>
                 </button>
             </li>
