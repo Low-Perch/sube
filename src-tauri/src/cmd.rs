@@ -1,6 +1,6 @@
-use tauri::{Manager, Url, Window, LogicalSize, Error as TauriError};
+use tauri::{Error as TauriError, LogicalSize, Manager, Url, Window};
 
-use crate::init::{PANEL_SIZE_POSITION, create_webview};
+use crate::init::{create_webview, PANEL_SIZE_POSITION};
 
 #[tauri::command]
 pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriError> {
@@ -13,7 +13,12 @@ pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriErr
         let window_size = window.inner_size()?;
         let width = window_size.width as f64;
         let height = window_size.height as f64;
-        create_webview(&window, "portal", PANEL_SIZE_POSITION, LogicalSize::new(width - PANEL_SIZE_POSITION, height))?;
+        create_webview(
+            &window,
+            "portal",
+            PANEL_SIZE_POSITION,
+            LogicalSize::new(width - PANEL_SIZE_POSITION, height),
+        )?;
     }
 
     Ok(())
