@@ -1,5 +1,5 @@
 use std::error::Error;
-use tauri::{App, Error as TauriError, LogicalPosition, LogicalSize, WebviewUrl, Url, Window, WindowEvent, Manager, Webview};
+use tauri::{App, Error as TauriError, LogicalPosition, LogicalSize, WebviewUrl, Window, WindowEvent, Manager, Webview};
 
 pub const WIDTH: f64 = 900.;
 pub const HEIGHT: f64 = 600.;
@@ -12,6 +12,7 @@ fn create_window(app: &App) -> Result<Window, TauriError> {
     tauri::window::WindowBuilder::new(app, "main")
         .inner_size(WIDTH, HEIGHT)
         .min_inner_size(WIDTH, HEIGHT)
+        .visible(false)
         .build()
 }
 
@@ -36,6 +37,11 @@ pub fn setup(app: &mut App) -> Result<(), Box<dyn Error>> {
     let window = create_window(app)?;
     create_webview(&window, PANEL, 0., LogicalSize::new(PANEL_SIZE_POSITION, HEIGHT))?;
     create_webview(&window, PORTAL, PANEL_SIZE_POSITION, LogicalSize::new(WIDTH - PANEL_SIZE_POSITION, HEIGHT))?;
+
+    tauri::async_runtime::spawn(async move {
+        std::thread::sleep(std::time::Duration::from_millis(1000));
+        window.show().unwrap();
+    });
 
     Ok(())
 }
