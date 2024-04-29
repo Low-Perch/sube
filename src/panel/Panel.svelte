@@ -1,6 +1,8 @@
 <script lang="ts">
+    import { onMount } from 'svelte'
     import { writable } from 'svelte/store'
     import { invoke } from '@tauri-apps/api/core'
+    import { listen } from '@tauri-apps/api/event'
 
     import { sites, type Site } from '../utils/constants'
 
@@ -8,11 +10,27 @@
 
     async function setActionTab(e: MouseEvent) {
         const button = e.currentTarget as HTMLButtonElement;
-        await invoke('set_webview_url', { url: button.value })
-
         const site = sites.find(({ id }) => id == button.name)
-        site && activeTab.set(site)
+        if (!site) return
+
+        activeTab.set(site)
+        await invoke('set_webview_url', { url: site.url })
     }
+
+    onMount(() => {
+        (async () => {
+            listen
+            const unlisten = await listen<{ tab: string }>('switch_tab', event => {
+                const tab = event?.payload?.tab
+                if (!tab) return
+
+                const site = sites.find(({ id }) => id == tab)
+                site && activeTab.set(site)
+            })
+
+            return () => unlisten()
+        })()
+    })
 </script>
 
 <main class="fixed h-full w-full justify-center items-center py-2">
