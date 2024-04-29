@@ -1,18 +1,16 @@
 use std::error::Error;
-use tauri::{
-    App, Error as TauriError, LogicalPosition, LogicalSize, Manager, Webview, WebviewUrl, Window,
-    WindowEvent,
-};
+use tauri::{App, Error as TauriError, LogicalPosition, LogicalSize, Webview, WebviewUrl, Window};
 
 use crate::config::Config;
 
+pub const MAIN: &str = "main";
 pub const PANEL: &str = "panel";
 pub const PORTAL: &str = "portal";
 
 fn create_window(app: &App, config: &Config) -> Result<Window, TauriError> {
     let window = &config.window;
 
-    tauri::window::WindowBuilder::new(app, "main")
+    tauri::window::WindowBuilder::new(app, MAIN)
         .inner_size(window.width, window.height)
         .min_inner_size(window.width, window.height)
         .visible(false)
@@ -42,7 +40,7 @@ pub fn create_webview(
     )
 }
 
-pub fn setup(app: &mut App) -> Result<(), Box<dyn Error>> {
+pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let config = Config::get_config();
     let window = create_window(app, &config)?;
 
@@ -66,47 +64,4 @@ pub fn setup(app: &mut App) -> Result<(), Box<dyn Error>> {
     });
 
     Ok(())
-}
-
-pub fn window_events(window: &Window, event: &WindowEvent) {
-    let panel = window.get_webview(PANEL).unwrap();
-    let portal = window.get_webview(PORTAL).unwrap();
-
-    let panel_size = Config::get_config().window.panel_size;
-
-    match event {
-        WindowEvent::Resized(dimensions) => {
-            panel
-                .set_size(LogicalSize {
-                    width: panel_size,
-                    height: dimensions.height.into(),
-                })
-                .unwrap();
-            portal
-                .set_size(LogicalSize {
-                    width: dimensions.width as f64 - panel_size,
-                    height: dimensions.height as f64,
-                })
-                .unwrap();
-        }
-        WindowEvent::ScaleFactorChanged {
-            scale_factor,
-            new_inner_size,
-            ..
-        } => {
-            panel
-                .set_size(LogicalSize {
-                    width: panel_size,
-                    height: (new_inner_size.height as f64 / scale_factor),
-                })
-                .unwrap();
-            portal
-                .set_size(LogicalSize {
-                    width: new_inner_size.width as f64 / scale_factor - panel_size,
-                    height: new_inner_size.height as f64 / scale_factor,
-                })
-                .unwrap();
-        }
-        _ => {}
-    };
 }

@@ -1,11 +1,11 @@
 use tauri::{Error as TauriError, LogicalSize, Manager, Url, Window};
 
 use crate::config::Config;
-use crate::init::create_webview;
+use crate::app::setup::{PORTAL, create_webview};
 
 #[tauri::command]
 pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriError> {
-    let mut portal = window.get_webview("portal").unwrap();
+    let mut portal = window.get_webview(PORTAL).unwrap();
     if url.starts_with("https") {
         let portal_url = Url::parse(&url).unwrap();
         portal.navigate(portal_url);
@@ -19,7 +19,7 @@ pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriErr
 
         create_webview(
             &window,
-            "portal",
+            PORTAL,
             panel_size,
             LogicalSize::new(width - panel_size, height),
         )?;
