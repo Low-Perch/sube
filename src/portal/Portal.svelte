@@ -1,8 +1,8 @@
 <script lang="ts">
+    import { writable } from 'svelte/store'
     import { invoke } from '@tauri-apps/api/core'
 
-    type Site = { id: string, ico: string, url: string }
-
+    import Input from './components/Input.svelte'
     import { sites, type Site } from '../utils/constants'
 
     const favourites = writable<Site[]>(sites);
@@ -11,25 +11,22 @@
         const button = e.currentTarget as HTMLButtonElement;
         await invoke('set_webview_url', { url: button.value })
     }
+
+    function filterList(event: CustomEvent) {
+        const searchValue = event.detail.value
+        let filteredList = sites.filter(({ id }) => id.startsWith(searchValue))
+        favourites.set(filteredList)
+    }
 </script>
 
 <main class="flex-col h-dvh justify-center mx-auto bg-gray-800 p-20">
     <div class="flex-col my-10 mx-auto w-full max-w-screen-md">
-        <div class="relative">
-            <input 
-                placeholder="Enter keywords or a url"
-                class="w-full mx-auto h-12 rounded-3xl px-12 py-2"
-            />
-            <img 
-                class="absolute left-2 top-2 w-8 h-8"
-                src="https://icons.duckduckgo.com/ip3/google.com.ico"
-            />
-        </div>
+        <Input on:search={filterList} />
 
         <h2 class="text-slate-100 text-xl mt-10">Favourites</h2>
 
         <div class="flex flex-wrap gap-4 my-10 mx-auto">
-            {#each sites as site (site.id)}
+            {#each $favourites as site (site.id)}
                 <button 
                     name={site.id}
                     value={site.url}
