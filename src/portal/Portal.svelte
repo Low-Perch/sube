@@ -4,12 +4,14 @@
 
     import Input from './components/Input.svelte'
     import { sites, type Site } from '../utils/constants'
+    import { emitTo } from '@tauri-apps/api/event'
 
     const favourites = writable<Site[]>(sites);
 
     async function setActionTab(e: MouseEvent) {
         const button = e.currentTarget as HTMLButtonElement;
         await invoke('set_webview_url', { url: button.value })
+        await emitTo('main', 'switch_tab', { tab: button.name })
     }
 
     function filterList(event: CustomEvent) {
