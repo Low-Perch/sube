@@ -4,18 +4,19 @@ use tauri::{
     WindowEvent,
 };
 
-pub const WIDTH: f64 = 900.;
-pub const HEIGHT: f64 = 600.;
-pub const PANEL_SIZE_POSITION: f64 = 36.;
+use crate::config::Config;
 
 pub const PANEL: &str = "panel";
 pub const PORTAL: &str = "portal";
 
-fn create_window(app: &App) -> Result<Window, TauriError> {
+fn create_window(app: &App, config: &Config) -> Result<Window, TauriError> {
+    let window = &config.window;
+
     tauri::window::WindowBuilder::new(app, "main")
-        .inner_size(WIDTH, HEIGHT)
-        .min_inner_size(WIDTH, HEIGHT)
+        .inner_size(window.width, window.height)
+        .min_inner_size(window.width, window.height)
         .visible(false)
+        .resizable(window.resizable)
         .build()
 }
 
@@ -31,29 +32,33 @@ pub fn create_webview(
     };
 
     let position = LogicalPosition::new(start_position, 0.);
+    let config = Config::get_config();
+    let user_agent = config.user_agent.get();
 
     window.add_child(
         tauri::webview::WebviewBuilder::new(label, url)
-            // TODO: need to be able to select user_agent based on OS
-        .user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15"),
+        .user_agent(user_agent),
         position,
         size
     )
 }
 
 pub fn setup(app: &mut App) -> Result<(), Box<dyn Error>> {
-    let window = create_window(app)?;
+    let config = Config::get_config();
+    let window = create_window(app, &config)?;
+
+    let window_cfg = &config.window; 
     create_webview(
         &window,
         PANEL,
         0.,
-        LogicalSize::new(PANEL_SIZE_POSITION, HEIGHT),
+        LogicalSize::new(window_cfg.width, window_cfg.height),
     )?;
     create_webview(
         &window,
         PORTAL,
-        PANEL_SIZE_POSITION,
-        LogicalSize::new(WIDTH - PANEL_SIZE_POSITION, HEIGHT),
+        window_cfg.panel_size,
+        LogicalSize::new(window_cfg.width - window_cfg.panel_size, window_cfg.height),
     )?;
 
     tauri::async_runtime::spawn(async move {
@@ -68,17 +73,19 @@ pub fn window_events(window: &Window, event: &WindowEvent) {
     let panel = window.get_webview(PANEL).unwrap();
     let portal = window.get_webview(PORTAL).unwrap();
 
+    let panel_size = Config::get_config().window.panel_size;
+
     match event {
         WindowEvent::Resized(dimensions) => {
             panel
                 .set_size(LogicalSize {
-                    width: 36.,
+                    width: panel_size,
                     height: dimensions.height.into(),
                 })
                 .unwrap();
             portal
                 .set_size(LogicalSize {
-                    width: dimensions.width as f64 - 36.,
+                    width: dimensions.width as f64 - panel_size,
                     height: dimensions.height as f64,
                 })
                 .unwrap();
@@ -90,13 +97,13 @@ pub fn window_events(window: &Window, event: &WindowEvent) {
         } => {
             panel
                 .set_size(LogicalSize {
-                    width: 36.,
+                    width:  panel_size,
                     height: (new_inner_size.height as f64 / scale_factor),
                 })
                 .unwrap();
             portal
                 .set_size(LogicalSize {
-                    width: new_inner_size.width as f64 / scale_factor - 36.,
+                    width: new_inner_size.width as f64 / scale_factor - panel_size,
                     height: new_inner_size.height as f64 / scale_factor,
                 })
                 .unwrap();

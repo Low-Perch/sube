@@ -3,6 +3,7 @@
 
 mod cmd;
 mod init;
+mod config;
 
 fn main() {
     tauri::Builder::default()
