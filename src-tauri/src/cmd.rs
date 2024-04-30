@@ -1,7 +1,7 @@
 use tauri::{Error as TauriError, LogicalSize, Manager, Url, Window};
 
+use crate::app::setup::{create_webview, PORTAL};
 use crate::config::Config;
-use crate::app::setup::{PORTAL, create_webview};
 
 #[tauri::command]
 pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriError> {

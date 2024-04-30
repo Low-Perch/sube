@@ -1,6 +1,7 @@
 use std::error::Error;
 use tauri::{App, Error as TauriError, LogicalPosition, LogicalSize, Webview, WebviewUrl, Window};
 
+use crate::app::shortcut;
 use crate::config::Config;
 
 pub const MAIN: &str = "main";
@@ -11,10 +12,12 @@ fn create_window(app: &App, config: &Config) -> Result<Window, TauriError> {
     let window = &config.window;
 
     tauri::window::WindowBuilder::new(app, MAIN)
+        .visible(false)
+        .always_on_top(true)
+        .resizable(window.resizable)
+        .visible_on_all_workspaces(true)
         .inner_size(window.width, window.height)
         .min_inner_size(window.width, window.height)
-        .visible(false)
-        .resizable(window.resizable)
         .build()
 }
 
@@ -41,6 +44,9 @@ pub fn create_webview(
 }
 
 pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
+    // required for window.always_on_top.
+    app.set_activation_policy(tauri::ActivationPolicy::Accessory);
+
     let config = Config::get_config();
     let window = create_window(app, &config)?;
 
@@ -62,6 +68,8 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
         std::thread::sleep(std::time::Duration::from_millis(1000));
         window.show().unwrap();
     });
+
+    shortcut::init(app)?;
 
     Ok(())
 }
