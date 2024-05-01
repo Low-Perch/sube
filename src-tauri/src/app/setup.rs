@@ -36,8 +36,15 @@ pub fn create_webview(
     let config = Config::get_config();
     let user_agent = config.user_agent.get();
 
+    let script = match label == PORTAL {
+        true => include_str!("inject.js"),
+        false => "",
+    };
+
     window.add_child(
-        tauri::webview::WebviewBuilder::new(label, url).user_agent(user_agent),
+        tauri::webview::WebviewBuilder::new(label, url)
+            .user_agent(user_agent)
+            .initialization_script(script),
         position,
         size,
     )
