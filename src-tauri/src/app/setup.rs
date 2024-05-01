@@ -1,5 +1,7 @@
 use std::error::Error;
-use tauri::{App, Error as TauriError, LogicalPosition, LogicalSize, Webview, WebviewUrl, Window};
+use tauri::{
+    App, Error as TauriError, LogicalPosition, LogicalSize, Url, Webview, WebviewUrl, Window,
+};
 
 use crate::app::shortcut;
 use crate::config::Config;
@@ -26,10 +28,21 @@ pub fn create_webview(
     label: &str,
     start_position: f64,
     size: LogicalSize<f64>,
+    url: Option<&str>,
 ) -> Result<Webview, TauriError> {
     let url = match label {
         "panel" => WebviewUrl::App("../../panel.html".into()),
-        _ => WebviewUrl::App("../../portal.html".into()),
+        _ => {
+            if let Some(url) = url {
+                if url.starts_with("https") {
+                    WebviewUrl::External(Url::parse(url).unwrap())
+                } else {
+                    WebviewUrl::App("../../portal.html".into())
+                }
+            } else {
+                WebviewUrl::App("../../portal.html".into())
+            }
+        }
     };
 
     let position = LogicalPosition::new(start_position, 0.);
@@ -63,12 +76,14 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
         PANEL,
         0.,
         LogicalSize::new(window_cfg.width, window_cfg.height),
+        None,
     )?;
     create_webview(
         &window,
         PORTAL,
         window_cfg.panel_size,
         LogicalSize::new(window_cfg.width - window_cfg.panel_size, window_cfg.height),
+        None,
     )?;
 
     tauri::async_runtime::spawn(async move {
