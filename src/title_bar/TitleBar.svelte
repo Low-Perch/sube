@@ -1,7 +1,12 @@
 <script lang="ts">
+    import { invoke } from '@tauri-apps/api/core'
     import { getCurrent } from '@tauri-apps/api/window'
 
     const appWindow = getCurrent()
+
+    async function goBack() { await invoke("update_history", { state: 'Back' }) }
+    async function goForward() { await invoke("update_history", { state: 'Forward' }) }
+    async function reload() { await invoke("update_history", { state: 'Reload' }) }
 
     function close() { appWindow.close() }
     function minimize() { appWindow.minimize() }
@@ -11,7 +16,7 @@
 <main data-tauri-drag-region class="flex h-9 w-full justify-between items-center">
     <div class="flex items-center relative left-9 w-24 gap-x-2 h-full place-items-center">
         <button
-            on:click={() => {}}
+            on:click={goBack}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
             <svg
@@ -24,7 +29,7 @@
         </button>
 
         <button
-            on:click={() => {}}
+            on:click={goForward}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
             <svg
@@ -37,7 +42,7 @@
         </button>
 
         <button
-            on:click={() => {}}
+            on:click={reload}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
             <svg
@@ -50,7 +55,7 @@
         </button>
     </div>
 
-    <div class="flex-col justify-center place-content-center items-end w-full h-9 max-w-screen-sm md:max-w-screen-md">
+    <div class="flex-col justify-center place-content-center items-end w-full h-9 w-3/5 md:max-w-screen-md lg:max-w-screen-lg">
         <input class="w-full bg-black border-gray-500 border-2 text-gray-300 h-8 my-0.5 px-2 rounded-md" />
     </div>
 
