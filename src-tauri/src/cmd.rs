@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use tauri::{Error as TauriError, LogicalPosition, LogicalSize, Manager, Window};
 
 use crate::app::setup::{create_webview, PORTAL};
@@ -23,4 +24,23 @@ pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriErr
     )?;
 
     Ok(())
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum History {
+    Back,
+    Forward,
+    Reload,
+}
+
+#[tauri::command]
+pub async fn update_history(window: Window, state: History) {
+    let portal = window.get_webview(PORTAL).unwrap();
+    let update = match state {
+        History::Back => "window.history.back()",
+        History::Forward => "window.history.forward()",
+        History::Reload => "window.location.reload()",
+    };
+
+    portal.eval(update).unwrap();
 }
