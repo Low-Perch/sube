@@ -27,7 +27,7 @@ fn create_window(app: &App, config: &Config) -> Result<Window, TauriError> {
 pub fn create_webview(
     window: &Window,
     label: &str,
-    start_position: f64,
+    position: LogicalPosition<f64>,
     size: LogicalSize<f64>,
     url: Option<&str>,
 ) -> Result<Webview, TauriError> {
@@ -46,7 +46,6 @@ pub fn create_webview(
         }
     };
 
-    let position = LogicalPosition::new(start_position, 0.);
     let config = Config::get_config();
     let user_agent = config.user_agent.get();
 
@@ -70,20 +69,23 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
 
     let config = Config::get_config();
     let window = create_window(app, &config)?;
-
     let window_cfg = &config.window;
     create_webview(
         &window,
         PANEL,
-        0.,
-        LogicalSize::new(window_cfg.width, window_cfg.height),
+        LogicalPosition::new(0., window_cfg.panel_size),
+        LogicalSize::new(window_cfg.width, window_cfg.height - window_cfg.panel_size),
         None,
     )?;
+
     create_webview(
         &window,
         PORTAL,
-        window_cfg.panel_size,
-        LogicalSize::new(window_cfg.width - window_cfg.panel_size, window_cfg.height),
+        LogicalPosition::new(window_cfg.panel_size, window_cfg.panel_size),
+        LogicalSize::new(
+            window_cfg.width - window_cfg.panel_size,
+            window_cfg.height - window_cfg.panel_size,
+        ),
         None,
     )?;
 
