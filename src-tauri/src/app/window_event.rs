@@ -1,5 +1,5 @@
-use crate::config::Config;
 use crate::app::setup::{PANEL, PORTAL, TITLE_BAR};
+use crate::config::Config;
 use tauri::{LogicalSize, Manager, PhysicalSize, Window, WindowEvent};
 
 fn resize_webviews(window: &Window, dimensions: PhysicalSize<u32>, scale_f: f64) {
