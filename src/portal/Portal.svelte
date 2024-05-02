@@ -10,8 +10,8 @@
 
     async function setActionTab(e: MouseEvent) {
         const button = e.currentTarget as HTMLButtonElement;
+        await emitTo('panel', 'switch_tab', { tab: button.name })
         await invoke('set_webview_url', { url: button.value })
-        await emitTo('main', 'switch_tab', { tab: button.name })
     }
 
     function filterList(event: CustomEvent) {
