@@ -10,6 +10,7 @@ pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriErr
 
     let panel_size = Config::get_config().window.panel_size;
     let window_size = window.inner_size()?;
+    let scale_f = window.scale_factor()?;
     let width = window_size.width as f64;
     let height = window_size.height as f64;
 
@@ -17,7 +18,7 @@ pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriErr
         &window,
         PORTAL,
         panel_size,
-        LogicalSize::new(width - panel_size, height),
+        LogicalSize::new(width / scale_f - panel_size, height / scale_f),
         Some(&url),
     )?;
 
