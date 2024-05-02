@@ -9,6 +9,7 @@ use crate::config::Config;
 pub const MAIN: &str = "main";
 pub const PANEL: &str = "panel";
 pub const PORTAL: &str = "portal";
+pub const TITLE_BAR: &str = "title_bar";
 
 fn create_window(app: &App, config: &Config) -> Result<Window, TauriError> {
     let window = &config.window;
@@ -32,8 +33,8 @@ pub fn create_webview(
     url: Option<&str>,
 ) -> Result<Webview, TauriError> {
     let url = match label {
-        "panel" => WebviewUrl::App("../../panel.html".into()),
-        _ => {
+        PANEL => WebviewUrl::App("../../panel.html".into()),
+        PORTAL => {
             if let Some(url) = url {
                 if url.starts_with("https") {
                     WebviewUrl::External(Url::parse(url).unwrap())
@@ -44,6 +45,7 @@ pub fn create_webview(
                 WebviewUrl::App("../../portal.html".into())
             }
         }
+        _ => WebviewUrl::App("../../title_bar.html".into()),
     };
 
     let config = Config::get_config();
@@ -70,6 +72,15 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     let config = Config::get_config();
     let window = create_window(app, &config)?;
     let window_cfg = &config.window;
+
+    create_webview(
+        &window,
+        TITLE_BAR,
+        LogicalPosition::new(0., 0.),
+        LogicalSize::new(window_cfg.width, window_cfg.panel_size),
+        None,
+    )?;
+
     create_webview(
         &window,
         PANEL,
