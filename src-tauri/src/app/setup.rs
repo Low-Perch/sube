@@ -51,9 +51,9 @@ pub fn create_webview(
     let config = Config::get_config();
     let user_agent = config.user_agent.get();
 
-    let script = match label == PORTAL {
-        true => include_str!("inject.js"),
-        false => "",
+    let script = match label {
+        PORTAL => include_str!("inject.js"),
+        _ => "",
     };
 
     window.add_child(
