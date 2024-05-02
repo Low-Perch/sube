@@ -17,6 +17,7 @@ fn create_window(app: &App, config: &Config) -> Result<Window, TauriError> {
         .visible(false)
         .always_on_top(true)
         .resizable(window.resizable)
+        .decorations(false)
         .visible_on_all_workspaces(true)
         .inner_size(window.width, window.height)
         .min_inner_size(window.width, window.height)
