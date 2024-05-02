@@ -1,6 +1,6 @@
 <script lang="ts"></script>
 
-<main data-tauri-drag-region class="flex h-9 w-full items-center bg-zinc-600">
+<main data-tauri-drag-region class="flex h-9 w-full items-center">
     <div  class="flex items-center gap-x-2 h-full ml-2">
         <button
             on:click={() => {}}
@@ -9,7 +9,7 @@
             <svg
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                class="stroke-slate-200 fill-slate-200 w-8 h-8"
+                class="mr-1 stroke-slate-200 fill-slate-200 w-8 h-8"
             >
                 <path fill="currentColor" d="M14.41 18.16L8.75 12.5l5.66-5.66l.7.71l-4.95 4.95l4.95 4.95z" />
             </svg>
@@ -22,7 +22,7 @@
             <svg
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                class="stroke-slate-200 fill-slate-200 w-8 h-8"
+                class="ml-1 stroke-slate-200 fill-slate-200 w-8 h-8"
             >
                 <path fill="currentColor" d="m8.59 18.16l5.66-5.66l-5.66-5.66l-.7.71l4.95 4.95l-4.95 4.95z" />
             </svg>
