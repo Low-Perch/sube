@@ -1,12 +1,11 @@
 use crate::config::Config;
+use crate::app::setup::{PANEL, PORTAL, TITLE_BAR};
 use tauri::{LogicalSize, Manager, PhysicalSize, Window, WindowEvent};
-
-const PANEL: &str = "panel";
-const PORTAL: &str = "portal";
 
 fn resize_webviews(window: &Window, dimensions: PhysicalSize<u32>, scale_f: f64) {
     let panel = window.get_webview(PANEL).unwrap();
     let portal = window.get_webview(PORTAL).unwrap();
+    let title_bar = window.get_webview(TITLE_BAR).unwrap();
     let panel_size = Config::get_config().window.panel_size;
 
     panel
@@ -15,10 +14,18 @@ fn resize_webviews(window: &Window, dimensions: PhysicalSize<u32>, scale_f: f64)
             height: (dimensions.height as f64 / scale_f),
         })
         .unwrap();
+
     portal
         .set_size(LogicalSize {
             width: dimensions.width as f64 / scale_f - panel_size,
             height: dimensions.height as f64 / scale_f,
+        })
+        .unwrap();
+
+    title_bar
+        .set_size(LogicalSize {
+            width: dimensions.width as f64 / scale_f,
+            height: panel_size,
         })
         .unwrap();
 }
