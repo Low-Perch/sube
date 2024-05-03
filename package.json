@@ -10,8 +10,7 @@
         "tauri": "tauri",
         "check": "svelte-check --tsconfig ./tsconfig.json",
         "lint": "prettier --check . && eslint .",
-        "format": "prettier --write .",
-        "prepare": "node .husky/install.mjs && husky install"
+        "format": "prettier --write ."
     },
     "lint-staged": {
         "*.{js,ts,svelte}": "eslint --fix --cache --cache-location ./node_modules/.cache/.eslintcache",
@@ -24,6 +23,8 @@
         "@tauri-apps/plugin-shell": ">=2.0.0-beta.0"
     },
     "devDependencies": {
+        "@eslint/eslintrc": "3.0.2",
+        "@eslint/js": "9.1.1",
         "@sveltejs/vite-plugin-svelte": "^3.0.1",
         "@tauri-apps/cli": ">=2.0.0-beta.0",
         "@tsconfig/svelte": "^5.0.2",
