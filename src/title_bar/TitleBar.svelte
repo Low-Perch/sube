@@ -14,7 +14,7 @@
 </script>
 
 <main data-tauri-drag-region class="flex h-9 w-full justify-between items-center">
-    <div class="flex items-center relative left-9 w-24 gap-x-2 h-full place-items-center">
+    <div class="flex justify-center items-center relative left-8 w-28 gap-x-2 h-full place-items-center">
         <button
             on:click={goBack}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
@@ -55,11 +55,11 @@
         </button>
     </div>
 
-    <div class="flex-col justify-center place-content-center items-end w-full h-9 w-3/5 md:max-w-screen-md lg:max-w-screen-lg">
+    <div class="flex-col justify-center h-9 w-1/2 lg:w-3/5 md:max-w-screen-md lg:max-w-screen-lg">
         <input class="w-full bg-black border-gray-500 border-2 text-gray-300 h-8 my-0.5 px-2 rounded-md" />
     </div>
 
-    <div class="flex justify-center items-center w-28 h-9 gap-x-2">
+    <div class="flex justify-center items-center w-24 h-9 gap-x-2 mr-2">
         <button
             on:click={minimize}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
@@ -77,9 +77,9 @@
 
         <button
             on:click={close}
-            class="select-none flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
+            class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
-            <span class="text-2xl text-slate-200">{@html '&#10005;'}</span>
+            <span class="ml-0.5 text-2xl text-slate-200">{@html '&#10005;'}</span>
         </button>
     </div>
 </main>
