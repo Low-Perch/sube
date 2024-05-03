@@ -13,7 +13,7 @@
         "format": "prettier --write ."
     },
     "lint-staged": {
-        "*.{js,ts,svelte}": "eslint --fix --cache --cache-location ./node_modules/.cache/.eslintcache",
+        "*.{js,ts,svelte}": "eslint --fix --cache",
         "*.{js,ts,css,md,svelte,json}": "prettier --write",
         "*.js": "eslint --cache --fix",
         "*.{js,css,md}": "prettier --write"
