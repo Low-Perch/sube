@@ -1,6 +1,6 @@
 use std::error::Error;
 use tauri::{
-    App, Error as TauriError, LogicalPosition, LogicalSize, Url, Webview, WebviewUrl, Window,
+    App, Error as TauriError, LogicalPosition, LogicalSize, Url, Webview, WebviewUrl, Window, Manager,
 };
 
 use crate::app::shortcut;
@@ -56,10 +56,19 @@ pub fn create_webview(
         _ => "",
     };
 
+    let label_clone = label.to_owned();
+    let window_clone = window.to_owned();
+
     window.add_child(
         tauri::webview::WebviewBuilder::new(label, url)
             .user_agent(user_agent)
-            .initialization_script(script),
+            .initialization_script(script)
+            .on_navigation(move |url| {
+                if label_clone == PORTAL {
+                    window_clone.emit_to(TITLE_BAR, "url_update", url).unwrap();
+                }
+                true
+            }),
         position,
         size,
     )
