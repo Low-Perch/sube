@@ -19,6 +19,12 @@
         const state = button.name
         await invoke('update_history', { state })
     }
+
+    const close = () => appWindow.close()
+
+    const minimize = () => appWindow.minimize()
+
+    const toggleMaximize = () => appWindow.toggleMaximize()
 </script>
 
 <main data-tauri-drag-region class="flex h-9 w-full justify-between items-center">
