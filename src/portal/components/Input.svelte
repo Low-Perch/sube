@@ -36,6 +36,7 @@
     />
     <img 
         class="absolute left-2 top-2 w-8 h-8"
+        alt="google search"
         src="https://icons.duckduckgo.com/ip3/google.com.ico"
     />
 </div>

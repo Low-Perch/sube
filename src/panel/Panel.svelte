@@ -48,7 +48,7 @@
                     class="inline-flex ml-2 justify-center items-center"
                 >
                     {#if site.ico.startsWith('https')}
-                        <img class="w-5 h-5 bg-transparent" src={site.ico} />
+                        <img alt={site.id} class="w-5 h-5 bg-transparent" src={site.ico} />
                     {:else}
                         <span class="flex relative -top-2.5 item-center w-5 h-5 text-3xl text-white">{@html site.ico}</span>
                     {/if}

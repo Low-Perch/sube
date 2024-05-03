@@ -36,7 +36,7 @@
                     class="flex flex-col bg-slate-400 rounded-md place-content-center justify-center items-center gap-2 w-20 h-20"
                 >
                     {#if site.ico.startsWith('https')}
-                        <img class="inline-flex justify-center w-6 h-6 bg-transparent" src={site.ico} />
+                        <img alt={site.id} class="inline-flex justify-center w-6 h-6 bg-transparent" src={site.ico} />
                     {:else}
                         <span class="flex relative -top-3 justify-center item-center w-5 h-5 text-3xl text-white">
                             {@html site.ico}
