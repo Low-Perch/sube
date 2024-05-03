@@ -42,6 +42,6 @@ export default [
                 }
             }
         ],
-        ignorePatterns: ['src-tauri/*', '*.lock*', 'node_modules/*', 'build/*', '.eslintcache']
+        ignorePatterns: ['src-tauri/*', '*.lock*', 'node_modules/*', 'build/*']
     })
 ]
