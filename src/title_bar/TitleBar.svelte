@@ -1,18 +1,13 @@
 <script lang="ts">
+    import { onMount } from 'svelte'
+    import { writable } from 'svelte/store'
     import { invoke } from '@tauri-apps/api/core'
+    import { listen } from '@tauri-apps/api/event'
     import { getCurrent } from '@tauri-apps/api/window'
 
     const appWindow = getCurrent()
 
-    async function goBack() {
-        await invoke('update_history', { state: 'Back' })
-    }
-    async function goForward() {
-        await invoke('update_history', { state: 'Forward' })
-    }
-    async function reload() {
-        await invoke('update_history', { state: 'Reload' })
-    }
+    let url = writable<string>('')
 
     async function updateHistory(event: Event) {
         const button = event.currentTarget as HTMLButtonElement
@@ -25,6 +20,17 @@
     const minimize = () => appWindow.minimize()
 
     const toggleMaximize = () => appWindow.toggleMaximize()
+
+    onMount(() => {
+        ;(async () => {
+            const unlisten = await listen<string>('url_update', (event) => {
+                const updated_url = event?.payload
+                url.set(updated_url)
+            })
+
+            return () => unlisten()
+        })()
+    })
 </script>
 
 <main data-tauri-drag-region class="flex h-9 w-full justify-between items-center">
@@ -85,6 +91,8 @@
 
     <div class="flex-col justify-center h-9 w-1/2 lg:w-3/5 md:max-w-screen-md lg:max-w-screen-lg">
         <input
+            readonly
+            value={$url}
             class="w-full bg-black border-gray-500 border-2 text-gray-300 h-8 my-0.5 px-2 rounded-md"
         />
     </div>
