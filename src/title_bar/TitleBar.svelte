@@ -14,14 +14,10 @@
         await invoke('update_history', { state: 'Reload' })
     }
 
-    function close() {
-        appWindow.close()
-    }
-    function minimize() {
-        appWindow.minimize()
-    }
-    function toggleMaximize() {
-        appWindow.toggleMaximize()
+    async function updateHistory(event: Event) {
+        const button = event.currentTarget as HTMLButtonElement
+        const state = button.name
+        await invoke('update_history', { state })
     }
 </script>
 
@@ -30,7 +26,8 @@
         class="flex justify-center items-center relative left-8 w-28 gap-x-2 h-full place-items-center"
     >
         <button
-            on:click={goBack}
+            name="Back"
+            on:click={updateHistory}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
             <svg
@@ -46,7 +43,8 @@
         </button>
 
         <button
-            on:click={goForward}
+            name="Forward"
+            on:click={updateHistory}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
             <svg
@@ -62,7 +60,8 @@
         </button>
 
         <button
-            on:click={reload}
+            name="Reload"
+            on:click={updateHistory}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
             <svg
