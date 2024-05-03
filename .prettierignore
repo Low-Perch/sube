@@ -1,5 +1,17 @@
-# Ignore files for PNPM, NPM and YARN
-pnpm-lock.yaml
-package-lock.json
-yarn.lock
+# Ignore files for BUN, PNPM, NPM and YARN
+*.lock*
+!package.json
+
+# Rust
 src-tauri
+build
+
+# Ignore Config
+.vscode
+*config.*
+.husky
+*.*rc
+vite*
+
+# Static (never changes)
+*.html
