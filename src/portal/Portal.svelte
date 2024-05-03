@@ -6,10 +6,10 @@
     import { sites, type Site } from '../utils/constants'
     import { emitTo } from '@tauri-apps/api/event'
 
-    const favourites = writable<Site[]>(sites);
+    const favourites = writable<Site[]>(sites)
 
     async function setActionTab(e: MouseEvent) {
-        const button = e.currentTarget as HTMLButtonElement;
+        const button = e.currentTarget as HTMLButtonElement
         await emitTo('panel', 'switch_tab', { tab: button.name })
         await invoke('set_webview_url', { url: button.value })
     }
@@ -29,16 +29,22 @@
 
         <div class="flex flex-wrap gap-4 my-10 mx-auto">
             {#each $favourites as site (site.id)}
-                <button 
+                <button
                     name={site.id}
                     value={site.url}
                     on:click={setActionTab}
                     class="flex flex-col bg-slate-400 rounded-md place-content-center justify-center items-center gap-2 w-20 h-20"
                 >
                     {#if site.ico.startsWith('https')}
-                        <img alt={site.id} class="inline-flex justify-center w-6 h-6 bg-transparent" src={site.ico} />
+                        <img
+                            alt={site.id}
+                            class="inline-flex justify-center w-6 h-6 bg-transparent"
+                            src={site.ico}
+                        />
                     {:else}
-                        <span class="flex relative -top-3 justify-center item-center w-5 h-5 text-3xl text-white">
+                        <span
+                            class="flex relative -top-3 justify-center item-center w-5 h-5 text-3xl text-white"
+                        >
                             {@html site.ico}
                         </span>
                     {/if}
