@@ -1,0 +1,3 @@
+bun lint
+npx lint-staged
+npx lint-staged

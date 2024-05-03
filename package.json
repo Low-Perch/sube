@@ -7,8 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "tauri": "tauri",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "tauri": "tauri"
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "prepare": "node .husky/install.mjs && husky install"
+  },
+  "lint-staged": {
+    "*.{js,ts,svelte}": "eslint --fix --cache --cache-location ./node_modules/.cache/.eslintcache",
+    "*.{js,ts,css,md,svelte,json}": "prettier --write",
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
     "@tauri-apps/api": ">=2.0.0-beta.0",
