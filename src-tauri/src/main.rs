@@ -8,6 +8,7 @@ mod config;
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .setup(app::setup::init)
         .on_window_event(app::window_event::init)
         .invoke_handler(tauri::generate_handler![
