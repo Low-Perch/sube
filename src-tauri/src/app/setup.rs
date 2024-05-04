@@ -1,6 +1,7 @@
 use std::error::Error;
 use tauri::{
-    App, Error as TauriError, LogicalPosition, LogicalSize, Url, Webview, WebviewUrl, Window, Manager,
+    App, Error as TauriError, LogicalPosition, LogicalSize, Manager, Url, Webview, WebviewUrl,
+    Window,
 };
 
 use crate::app::shortcut;
