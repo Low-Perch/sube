@@ -29,6 +29,8 @@
 
 <div class="relative">
     <input
+        autocorrect="off"
+        autocapitalize="off"
         on:input={onInput}
         on:keydown={onKeyDown}
         placeholder="Enter keywords or a url"
