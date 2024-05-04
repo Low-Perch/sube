@@ -17,5 +17,10 @@ export default defineConfig(async () => ({
             // 3. tell vite to ignore watching `src-tauri`
             ignored: ['**/src-tauri/**']
         }
+    },
+    build: {
+        rollupOptions: {
+            input: ['panel.html', 'portal.html', 'title_bar.html'],
+        }
     }
 }))
