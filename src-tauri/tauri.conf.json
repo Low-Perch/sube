@@ -1,7 +1,7 @@
 {
   "productName": "sube",
   "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.sube.app",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
@@ -10,7 +10,7 @@
   },
   "app": {
     "security": {
-      "csp": "default-src 'self'; connect-src ipc: http://ipc.localhost"
+      "csp": null
     }
   },
   "bundle": {
