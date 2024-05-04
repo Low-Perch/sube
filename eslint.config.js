@@ -42,6 +42,6 @@ export default [
                 }
             }
         ],
-        ignorePatterns: ['src-tauri/*', '*.lock*', 'node_modules/*', 'build/*']
+        ignorePatterns: ['src-tauri/*', '*.lock*', 'node_modules/*', 'dist/*']
     })
 ]
