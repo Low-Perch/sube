@@ -1,4 +1,4 @@
-name: 'test-on-pr'
+name: 'test-build'
 
 on: [pull_request, push]
 
@@ -45,7 +45,7 @@ jobs:
             - name: install frontend dependencies
               uses: oven-sh/setup-bun@v1
               with:
-                  bun-version: 1.0.30 # or "latest", "canary", <sha>
+                  bun-version: 'latest' # or "latest", "canary", <sha>
 
             - run: bun install # change this to npm, pnpm or bun depending on which one you use.
 
