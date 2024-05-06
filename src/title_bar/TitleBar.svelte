@@ -15,9 +15,9 @@
         await invoke('update_history', { state })
     }
 
-    const close = () => appWindow.close()
+    const close = async () => await appWindow.close()
 
-    const minimize = () => appWindow.minimize()
+    const minimize = async () => await appWindow.minimize()
 
     const toggleMaximize = () => appWindow.toggleMaximize()
 
