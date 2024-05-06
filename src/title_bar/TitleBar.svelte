@@ -7,7 +7,8 @@
 
     const appWindow = getCurrent()
 
-    let url = writable<string>('')
+    const url = writable<string>('')
+    const isFullScreen = writable<boolean>(false)
 
     async function updateHistory(event: Event) {
         const button = event.currentTarget as HTMLButtonElement
@@ -19,10 +20,16 @@
 
     const minimize = async () => await appWindow.minimize()
 
-    const toggleMaximize = () => appWindow.toggleMaximize()
+    const toggleMaximize = async () => {
+        await appWindow.toggleMaximize()
+        isFullScreen.update((fullScreen) => !fullScreen)
+    }
 
     onMount(() => {
         ;(async () => {
+            const fullScreen = await appWindow.isFullscreen()
+            isFullScreen.set(fullScreen)
+
             const unlisten = await listen<string>('url_update', (event) => {
                 const updated_url = event?.payload
                 url.set(updated_url)
@@ -109,7 +116,19 @@
             on:click={toggleMaximize}
             class="select-none inline-flex h-7 w-7 justify-center items-center hover:rounded-md hover:bg-zinc-700"
         >
-            <span class="text-2xl mb-1 text-slate-200">{@html '&#10064;'}</span>
+            {#if $isFullScreen}
+                <svg
+                    viewBox="-4 -6 28 28"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="ml-1 stroke-slate-200 fill-slate-200 w-8 h-8"
+                >
+                    <path
+                        d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z"
+                    />
+                </svg>
+            {:else}
+                <span class="text-2xl mb-1 text-slate-200">{@html '&#10064;'}</span>
+            {/if}
         </button>
 
         <button
