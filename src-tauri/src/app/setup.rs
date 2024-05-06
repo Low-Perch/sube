@@ -77,7 +77,8 @@ pub fn create_webview(
 
 pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
     // required for window.always_on_top.
-    if cfg!(target_os = "macos") {
+    #[cfg(target_os = "macos")]
+    {
         app.set_activation_policy(tauri::ActivationPolicy::Accessory);
     }
 
