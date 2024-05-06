@@ -17,7 +17,7 @@
     name={site.id}
     value={site.url}
     on:click={setActionTab}
-    class="flex flex-col bg-slate-400 rounded-md place-content-center justify-center items-center gap-2 w-20 h-20"
+    class="flex flex-col bg-slate-400 rounded-md place-content-center justify-center items-center gap-2 min-w-20 min-h-20 aspect-video"
 >
     {#if site.ico.startsWith('https')}
         <img
@@ -30,5 +30,6 @@
             {@html site.ico}
         </span>
     {/if}
+
     <label for={site.id} class="text-sm text-slate-100">{site.id}</label>
 </button>
