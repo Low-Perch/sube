@@ -3,10 +3,13 @@
     import { invoke } from '@tauri-apps/api/core'
     import { createEventDispatcher } from 'svelte'
 
-    const dispatch = createEventDispatcher()
-    const GOOGLE_SEARCH = 'https://google.com/search?q='
+    import { isValidAddress } from '../../utils/validators'
 
-    let search = writable<string>('')
+    const dispatch = createEventDispatcher()
+
+    const GOOGLE_SEARCH = 'https://google.com/search?q='
+    const search = writable<string>('')
+
     function onInput(e: Event) {
         const input = e.currentTarget as HTMLInputElement
         const value = input?.value
@@ -15,15 +18,19 @@
         dispatch('search', { value })
     }
 
-    async function searchQueryInGoogle() {
-        const searchUrl = `${GOOGLE_SEARCH}${$search}`
-        await invoke('set_webview_url', { url: searchUrl })
+    async function openSearchInput() {
+        const url = isValidAddress($search) ? getSiteUrl() : `${GOOGLE_SEARCH}${$search}`
+        await invoke('set_webview_url', { url })
+    }
+
+    function getSiteUrl() {
+        return $search.startsWith('http') ? $search : `https://` + $search
     }
 
     async function onKeyDown(event: KeyboardEvent) {
         if (event.key !== 'Enter') return
 
-        await searchQueryInGoogle()
+        await openSearchInput()
     }
 </script>
 
@@ -37,8 +44,8 @@
         class="w-full mx-auto h-12 rounded-3xl px-12 py-2"
     />
     <img
-        class="absolute left-2 top-2 w-8 h-8"
         alt="google search"
+        class="absolute left-2 top-2 w-8 h-8"
         src="https://icons.duckduckgo.com/ip3/google.com.ico"
     />
 </div>
