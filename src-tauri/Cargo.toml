@@ -19,3 +19,5 @@ tauri-plugin-global-shortcut = "2.0.0-beta.3"
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 toml = "0.8.12"
 dirs = "5.0.1"
+serde_yaml = "0.9.34"
+futures-util = "0.3.30"

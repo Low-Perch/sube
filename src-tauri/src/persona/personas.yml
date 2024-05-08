@@ -1,0 +1,30 @@
+personas:
+  me:
+    sites:
+      - id: github
+        url: https://github.com
+      - id: tauri
+        url: https://beta.tauri.app
+
+  tech:
+    sites:
+      - id: xkcd
+        url: https://xkcd.com
+      - id: hackernews
+        url: 'https://news.ycombinator.com'
+
+  music:
+    sites:
+      - id: lofi
+        url: https://lofi.cafe
+      - id: spotify
+        url: https://open.spotify.com
+
+  google:
+    sites:
+      - id: google
+        url: 'https://google.com'
+      - id: mail
+        url: https://mail.google.com
+      - id: keep
+        url: https://keep.google.com
