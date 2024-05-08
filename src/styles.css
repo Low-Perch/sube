@@ -5,10 +5,3 @@
 :root {
     @apply bg-[#202124];
 }
-
-@layer components {
-    .image {
-        -webkit-mask: var(--src) no-repeat center;
-        mask: var(--src) no-repeat center;
-    }
-}
