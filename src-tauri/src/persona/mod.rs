@@ -8,7 +8,7 @@ use sites::Site;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Persona {
-    sites: Vec<Site>,
+    pub sites: Vec<Site>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
