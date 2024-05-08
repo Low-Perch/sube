@@ -3,7 +3,8 @@ use tauri::{Error as TauriError, LogicalPosition, LogicalSize, Manager, State, W
 
 use crate::app::setup::{create_webview, PORTAL};
 use crate::config::Config;
-use crate::persona::{Persona, PersonasState};
+use crate::persona::sites::Site;
+use crate::persona::PersonasState;
 
 #[tauri::command]
 pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriError> {
@@ -47,14 +48,16 @@ pub async fn update_history(window: Window, state: History) {
 }
 
 #[tauri::command]
-pub async fn get_persona(
-    personas: State<'_, PersonasState>,
-    id: Option<&str>,
-) -> Result<Persona, TauriError> {
+pub async fn get_sites(personas: State<'_, PersonasState>) -> Result<Vec<Site>, TauriError> {
     let persona_guard = personas.0.lock().await;
+    let config = Config::get_config();
 
-    let id = id.unwrap_or("me");
+    let persona = persona_guard.get_persona(&config.persona);
+    Ok(persona.sites)
+}
 
-    let persona = persona_guard.get_persona(id);
-    Ok(persona)
+#[tauri::command]
+pub async fn get_persona() -> String {
+    let config = Config::get_config();
+    config.persona
 }

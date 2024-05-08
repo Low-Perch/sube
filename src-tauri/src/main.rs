@@ -21,6 +21,7 @@ fn main() {
             cmd::set_webview_url,
             cmd::update_history,
             cmd::get_persona,
+            cmd::get_sites,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
