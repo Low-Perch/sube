@@ -10,6 +10,7 @@ use window::WindowConfig;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Config {
+    pub persona: String,
     pub custom: Custom,
     pub window: WindowConfig,
     pub user_agent: UserAgent,
@@ -17,11 +18,9 @@ pub struct Config {
 
 impl Config {
     pub fn get_config() -> Self {
-        // Try to read config from user config
         if let Some(config) = Self::read_config() {
             config
         } else {
-            // Config DNE or unreadable, read from sube.toml
             let default_config = Self::get_default_config();
             Self::write_to_config(&default_config);
             default_config
@@ -64,7 +63,7 @@ impl Config {
         }
     }
 
-    pub fn get_toml_content(config_contents: &str) -> Self {
+    fn get_toml_content(config_contents: &str) -> Self {
         match toml::from_str(config_contents) {
             Ok(contents) => Self { ..contents },
             Err(_) => Self {
@@ -73,7 +72,7 @@ impl Config {
         }
     }
 
-    pub fn read_config_file(file: &str) -> String {
+    fn read_config_file(file: &str) -> String {
         match std::fs::read_to_string(file) {
             Ok(contents) => contents,
             Err(_) => String::new(),

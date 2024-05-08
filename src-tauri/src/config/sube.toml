@@ -1,3 +1,5 @@
+persona = "me"
+
 [window]
 width = 900.0
 height = 600.0
