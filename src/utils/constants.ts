@@ -1,39 +1,46 @@
-export type Site = { id: string; ico: string; url: string }
+export type Site = {
+    id: string
+    url: string
+    ico: string
+}
+
+export const genSvg = (id: string) => `https://api.iconify.design/simple-icons:${id}.svg`
+
+export const HOME: Site = {
+    id: 'home',
+    url: '../../panel.html',
+    ico: '&#x2b;'
+}
 
 export const sites: Site[] = [
     {
-        id: 'home',
-        url: '../../panel.html',
-        ico: '&#x2b;'
-    },
-    {
         id: 'google',
         url: 'https://google.com',
-        ico: 'https://icons.duckduckgo.com/ip3/google.com.ico'
+        ico: genSvg('https://google.com')
     },
     {
         id: 'github',
         url: 'https://github.com',
-        ico: 'https://icons.duckduckgo.com/ip3/github.com.ico'
+        ico: genSvg('https://github.com')
     },
     {
         id: 'spotify',
         url: 'https://open.spotify.com',
-        ico: 'https://icons.duckduckgo.com/ip3/spotify.com.ico'
+        ico: genSvg('https://spotify.com')
     },
     {
         id: 'tauri',
         url: 'https://beta.tauri.app',
-        ico: 'https://icons.duckduckgo.com/ip3/tauri.app.ico'
+        ico: genSvg('https://tauri.app')
     },
     {
         id: 'gmail',
         url: 'https://mail.google.com',
-        ico: 'https://icons.duckduckgo.com/ip3/mail.google.com.ico'
+        ico: genSvg('https://mail.google.com')
     },
     {
         id: 'youtube',
         url: 'https://youtube.com',
-        ico: 'https://icons.duckduckgo.com/ip3/youtube.com.ico'
+        ico: genSvg('https://youtube.com')
     }
 ]
