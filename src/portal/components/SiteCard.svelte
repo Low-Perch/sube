@@ -22,8 +22,8 @@
     {#if site.ico.startsWith('https')}
         <img
             alt={site.id}
-            class="inline-flex justify-center w-6 h-6 bg-transparent"
-            src={site.ico}
+            style="--src: url({site.ico})"
+            class="image invert inline-flex justify-center w-6 h-6"
         />
     {:else}
         <span class="flex relative -top-3 justify-center item-center w-5 h-5 text-3xl text-white">
