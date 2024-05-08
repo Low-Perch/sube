@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use futures_util::lock::Mutex;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 pub mod sites;
 
@@ -8,12 +8,12 @@ use sites::Site;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Persona {
-    sites: Vec<Site>
+    sites: Vec<Site>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Personas {
-    personas: HashMap::<String, Persona>
+    personas: HashMap<String, Persona>,
 }
 
 pub struct PersonasState(pub Mutex<Personas>);
@@ -53,7 +53,8 @@ impl Personas {
             return None;
         }
 
-        let personas_contents = Self::read_personas_file(personas_file_path.to_string_lossy().as_ref());
+        let personas_contents =
+            Self::read_personas_file(personas_file_path.to_string_lossy().as_ref());
 
         Some(Self::get_yaml_content(&personas_contents))
     }
@@ -76,12 +77,8 @@ impl Personas {
 
     pub fn get_yaml_content(personas_content: &str) -> Self {
         match serde_yaml::from_str(personas_content) {
-            Ok(contents) => {
-                Self { ..contents }
-            }
-            Err(_) => {
-                Self::get_default_personas()
-            },
+            Ok(contents) => Self { ..contents },
+            Err(_) => Self::get_default_personas(),
         }
     }
 

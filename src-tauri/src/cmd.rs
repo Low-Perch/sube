@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use tauri::{Error as TauriError, LogicalPosition, LogicalSize, Manager, State, Window, AppHandle, EventTarget};
+use tauri::{Error as TauriError, LogicalPosition, LogicalSize, Manager, State, Window};
 
 use crate::app::setup::{create_webview, PORTAL};
 use crate::config::Config;
@@ -47,13 +47,13 @@ pub async fn update_history(window: Window, state: History) {
 }
 
 #[tauri::command]
-pub async fn get_persona(personas: State<'_, PersonasState>, id: Option<&str>) -> Result<Persona, TauriError> {
+pub async fn get_persona(
+    personas: State<'_, PersonasState>,
+    id: Option<&str>,
+) -> Result<Persona, TauriError> {
     let persona_guard = personas.0.lock().await;
 
-    let id = match id {
-        Some(id) => id,
-        None => "me"
-    };
+    let id = id.unwrap_or("me");
 
     let persona = persona_guard.get_persona(id);
     Ok(persona)
