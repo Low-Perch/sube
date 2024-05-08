@@ -1,13 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { writable } from 'svelte/store'
     import { invoke } from '@tauri-apps/api/core'
     import { listen } from '@tauri-apps/api/event'
 
-    import { genSvg, HOME, type Site } from '../utils/constants'
-
-    const activeTab = writable<Site>(HOME)
-    const tabs = writable<Site[]>([])
+    import { loadSites, tabs, activeTab } from '../shared/store'
 
     async function setActionTab(e: MouseEvent) {
         const button = e.currentTarget as HTMLButtonElement
@@ -18,15 +14,9 @@
         await invoke('set_webview_url', { url: site.url })
     }
 
-    async function loadPanel() {
-        const { sites } = await invoke('get_persona', { id: null })
-        const list = [HOME, ...sites.map((site) => ({ ...site, ico: genSvg(site.id) }))]
-        tabs.set(list)
-    }
-
     onMount(() => {
         ;(async () => {
-            await loadPanel()
+            await loadSites()
 
             const unlisten = await listen<{ tab: string }>('switch_tab', (event) => {
                 const tab = event?.payload?.tab

@@ -1,51 +1,48 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { writable } from 'svelte/store'
-    import { invoke } from '@tauri-apps/api/core'
+    import { writable, derived } from 'svelte/store'
 
     import Input from './components/Input.svelte'
     import SiteGrid from './components/SiteGrid.svelte'
 
     import { isValidAddress } from '../utils/validators'
-    import { genSvg, HOME, type Site } from '../utils/constants'
+    import { loadSites, activeTab, tabs } from '../shared/store'
 
     const search = writable<string>('')
-    const tab = writable<Site | null>(null)
-    const tabs = writable<Site[]>([])
+
+    const filteredTabs = derived([tabs, search], ([$tabs, $search]) => {
+        const searchValue = $search.toLowerCase().trim()
+        return $tabs.filter(({ id }) => id.toLowerCase().startsWith(searchValue))
+    })
 
     function filterList(event: CustomEvent) {
         const searchValue = event.detail.value
         search.set(searchValue)
-        const filteredList = $tabs.filter(({ id }) => id.startsWith(searchValue))
-
-        tabs.set(filteredList)
         updateSite(searchValue)
     }
 
     function updateSite(value: string) {
         if (!isValidAddress(value)) {
-            return tab.set(null)
+            return activeTab.set(null)
         }
 
         const possibleUrl = value.startsWith('http') ? value : `https://${value}`
         const url = new URL(possibleUrl)
 
-        tab.set({
+        const hostParts = url.host.split('.')
+        const index = hostParts.length == 3 ? 1 : 0
+        const id = hostParts.at(index)
+
+        activeTab.set({
             id: url.host,
             url: url.href,
-            ico: `https://icons.duckduckgo.com/ip3/${url.host}.ico`
+            ico: `https://api.iconify.design/simple-icons:${id}.svg`
         })
-    }
-
-    async function loadPanel() {
-        const { sites } = await invoke('get_persona', { id: null })
-        const list = [HOME, ...sites.map((site) => ({ ...site, ico: genSvg(site.id) }))]
-        tabs.set(list)
     }
 
     onMount(() => {
         ;(async () => {
-            await loadPanel()
+            await loadSites()
         })()
     })
 </script>
@@ -54,10 +51,10 @@
     <div class="flex-col my-10 mx-auto w-full max-w-screen-md">
         <Input on:search={filterList} />
 
-        {#if !!$tabs.length}
-            <SiteGrid sites={$tabs} title="Favourites" />
-        {:else if $tab}
-            <SiteGrid sites={[$tab]} title="Found" />
+        {#if !!$filteredTabs.length}
+            <SiteGrid sites={$filteredTabs} title="Favourites" />
+        {:else if $activeTab}
+            <SiteGrid sites={[$activeTab]} title="Found" />
         {:else}
             <div
                 class="flex gap-2 text-2xl text-slate-400 justify-center items-center mt-10 h-72 bg-gray-700 rounded-xl"
