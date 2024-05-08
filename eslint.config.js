@@ -38,8 +38,13 @@ export default [
                     parser: '@typescript-eslint/parser'
                 },
                 rules: {
-                    'svelte/no-at-html-tags': 'off'
-                }
+                    'svelte/no-at-html-tags': 'off',
+                    '@typescript-eslint/no-unused-vars': [
+                        'warn',
+                        { varsIgnorePattern: '^\\$\\$(Props|Events|Slots)$' }
+                    ]
+                },
+
             }
         ],
         ignorePatterns: ['src-tauri/*', '*.lock*', 'node_modules/*', 'dist/*']
