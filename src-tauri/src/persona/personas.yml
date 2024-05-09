@@ -10,7 +10,7 @@ personas:
     sites:
       - id: xkcd
         url: https://xkcd.com
-      - id: hackernews
+      - id: ycombinator
         url: 'https://news.ycombinator.com'
 
   music:
@@ -24,7 +24,7 @@ personas:
     sites:
       - id: google
         url: 'https://google.com'
-      - id: mail
+      - id: gmail
         url: https://mail.google.com
-      - id: keep
+      - id: googlekeep
         url: https://keep.google.com
