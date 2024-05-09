@@ -3,7 +3,7 @@
     import { invoke } from '@tauri-apps/api/core'
     import { listen } from '@tauri-apps/api/event'
 
-    import { loadSites, tabs, activeTab } from '../shared/store'
+    import { loadData, updateProfile, tabs, activeTab } from '../shared/store'
 
     async function setActionTab(e: MouseEvent) {
         const button = e.currentTarget as HTMLButtonElement
@@ -16,9 +16,9 @@
 
     onMount(() => {
         ;(async () => {
-            await loadSites()
+            await loadData()
 
-            const unlisten = await listen<{ tab: string }>('switch_tab', (event) => {
+            const unlistenTabSwitch = await listen<{ tab: string }>('switch_tab', (event) => {
                 const tab = event?.payload?.tab
                 if (!tab) return
 
@@ -26,7 +26,15 @@
                 site && activeTab.set(site)
             })
 
-            return () => unlisten()
+            const unlistenPersonSwitch = await listen('new_persona', (event) => {
+                const newProfile = event?.payload ?? 'me'
+                updateProfile(newProfile)
+            })
+
+            return () => {
+                unlistenTabSwitch()
+                unlistenPersonSwitch()
+            }
         })()
     })
 </script>
