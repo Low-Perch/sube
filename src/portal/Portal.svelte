@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { invoke } from '@tauri-apps/api/core'
     import { writable, derived } from 'svelte/store'
 
     import Input from './components/Input.svelte'
@@ -8,11 +7,10 @@
     import SiteGrid from './components/SiteGrid.svelte'
 
     import { isValidAddress } from '../utils/validators'
-    import { loadSites, activeTab, tabs } from '../shared/store'
+    import { loadData, activeTab, tabs, updateProfile, profile, profiles } from '../shared/store'
+    import { listen } from '@tauri-apps/api/event'
 
     const search = writable<string>('')
-    const persona = writable<string>('')
-    const options = writable<string[]>([])
 
     const filteredTabs = derived([tabs, search], ([$tabs, $search]) => {
         const searchValue = $search.toLowerCase().trim()
@@ -44,19 +42,21 @@
 
     onMount(() => {
         ;(async () => {
-            await loadSites()
+            await loadData()
 
-            // TODO: get type from rust Profile struct
-            const personas = await invoke('get_personas')
-            persona.set(personas.current)
-            options.set(personas.list)
+            const unlisten = await listen('new_persona', (event) => {
+                const newProfile = event?.payload ?? 'me'
+                updateProfile(newProfile)
+            })
+
+            return () => unlisten()
         })()
     })
 </script>
 
 <main class="flex-col h-dvh justify-center mx-auto bg-gray-800 p-20">
-    {#if $persona}
-        <Select start={$persona} options={$options} />
+    {#if $profile}
+        <Select start={$profile} options={$profiles} />
     {/if}
 
     <div class="flex-col my-10 mx-auto w-full max-w-screen-md">
