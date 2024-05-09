@@ -1,14 +1,18 @@
 <script lang="ts">
     import { onMount } from 'svelte'
+    import { invoke } from '@tauri-apps/api/core'
     import { writable, derived } from 'svelte/store'
 
     import Input from './components/Input.svelte'
+    import Select from './components/Select.svelte'
     import SiteGrid from './components/SiteGrid.svelte'
 
     import { isValidAddress } from '../utils/validators'
     import { loadSites, activeTab, tabs } from '../shared/store'
 
     const search = writable<string>('')
+    const persona = writable<string>('')
+    const options = writable<string[]>([])
 
     const filteredTabs = derived([tabs, search], ([$tabs, $search]) => {
         const searchValue = $search.toLowerCase().trim()
@@ -22,9 +26,7 @@
     }
 
     function updateSite(value: string) {
-        if (!isValidAddress(value)) {
-            return activeTab.set(null)
-        }
+        if (!isValidAddress(value)) return activeTab.set(null)
 
         const possibleUrl = value.startsWith('http') ? value : `https://${value}`
         const url = new URL(possibleUrl)
@@ -43,11 +45,20 @@
     onMount(() => {
         ;(async () => {
             await loadSites()
+
+            // TODO: get type from rust Profile struct
+            const personas = await invoke('get_personas')
+            persona.set(personas.current)
+            options.set(personas.list)
         })()
     })
 </script>
 
 <main class="flex-col h-dvh justify-center mx-auto bg-gray-800 p-20">
+    {#if $persona}
+        <Select start={$persona} options={$options} />
+    {/if}
+
     <div class="flex-col my-10 mx-auto w-full max-w-screen-md">
         <Input on:search={filterList} />
 
