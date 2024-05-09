@@ -27,6 +27,13 @@ impl Config {
         }
     }
 
+    pub fn update_persona(persona: &str) -> String {
+        let mut data = Config::get_config();
+        data.persona = persona.to_string();
+        Self::write_to_config(&data);
+        data.persona
+    }
+
     fn read_config() -> Option<Self> {
         let config_dir = match Self::get_config_dir() {
             Ok(dir) => dir,
