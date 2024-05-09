@@ -28,6 +28,10 @@ impl Personas {
         self.personas.get(id).unwrap().to_owned()
     }
 
+    pub fn get_personas_list(&self) -> Vec<String> {
+        self.personas.keys().cloned().collect()
+    }
+
     pub fn get_personas() -> Self {
         if let Some(personas) = Self::read_personas() {
             personas
