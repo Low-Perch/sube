@@ -16,9 +16,10 @@
 
     async function setPersona(event: MouseEvent) {
         const element = event.target as HTMLLIElement
-        selection.set(element.innerText ?? 'me')
+        const persona = element?.innerText ?? 'me'
+        selection.set(persona)
         open.set(false)
-        await invoke('update_persona')
+        await invoke('update_persona', { persona })
     }
 
     function outsideClick() {
