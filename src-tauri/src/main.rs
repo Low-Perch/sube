@@ -18,11 +18,13 @@ fn main() {
         .setup(app::setup::init)
         .on_window_event(app::window_event::init)
         .invoke_handler(tauri::generate_handler![
+            cmd::init,
             cmd::set_webview_url,
             cmd::update_history,
             cmd::get_persona,
             cmd::get_sites,
             cmd::get_personas,
+            cmd::update_persona,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
-use tauri::{Error as TauriError, LogicalPosition, LogicalSize, Manager, State, Window};
+use tauri::{AppHandle, Error as TauriError, LogicalPosition, LogicalSize, Manager, State, Window};
 
 use crate::app::setup::{create_webview, PORTAL};
 use crate::config::Config;
 use crate::persona::sites::Site;
-use crate::persona::PersonasState;
+use crate::persona::{Personas, PersonasState};
 
 #[tauri::command]
 pub async fn set_webview_url(window: Window, url: String) -> Result<(), TauriError> {
@@ -64,18 +64,42 @@ pub async fn get_persona() -> String {
 
 #[derive(Serialize, Deserialize)]
 pub struct Profile {
-    current: String,
-    list: Vec<String>,
+    profile: String,
+    profiles: Vec<String>,
+    personas: Option<Personas>,
 }
 
 #[tauri::command]
 pub async fn get_personas(personas: State<'_, PersonasState>) -> Result<Profile, TauriError> {
     let persona_guard = personas.0.lock().await;
-    let current = get_persona().await;
-    let list = persona_guard.get_personas_list();
+    let profile = get_persona().await;
+    let profiles = persona_guard.get_personas_keys();
 
     Ok(Profile {
-        list,
-        current,
+        profiles,
+        profile,
+        personas: None,
     })
+}
+
+#[tauri::command]
+pub async fn init(personas: State<'_, PersonasState>) -> Result<Profile, TauriError> {
+    let persona_guard = personas.0.lock().await;
+    let personas = &persona_guard.personas;
+    let profiles = persona_guard.get_personas_keys();
+    let profile = get_persona().await;
+
+    Ok(Profile {
+        profiles,
+        profile,
+        personas: Some(Personas {
+            personas: personas.clone(),
+        }),
+    })
+}
+
+#[tauri::command]
+pub fn update_persona(app: AppHandle, persona: &str) {
+    let persona = Config::update_persona(persona);
+    app.emit("new_persona", persona).unwrap();
 }
