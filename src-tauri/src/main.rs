@@ -22,6 +22,7 @@ fn main() {
             cmd::update_history,
             cmd::get_persona,
             cmd::get_sites,
+            cmd::get_personas,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

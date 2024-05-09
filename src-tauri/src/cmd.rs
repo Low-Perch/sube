@@ -61,3 +61,21 @@ pub async fn get_persona() -> String {
     let config = Config::get_config();
     config.persona
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct Profile {
+    current: String,
+    list: Vec<String>,
+}
+
+#[tauri::command]
+pub async fn get_personas(personas: State<'_, PersonasState>) -> Result<Profile, TauriError> {
+    let persona_guard = personas.0.lock().await;
+    let current = get_persona().await;
+    let list = persona_guard.get_personas_list();
+
+    Ok(Profile {
+        list,
+        current,
+    })
+}
