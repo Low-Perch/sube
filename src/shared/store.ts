@@ -1,5 +1,7 @@
 import { writable, get } from 'svelte/store'
 import { invoke } from '@tauri-apps/api/core'
+import { emitTo } from '@tauri-apps/api/event'
+import { getCurrent } from '@tauri-apps/api/webview'
 
 import { HOME, type Site, genSvg } from '../utils/constants'
 
@@ -10,6 +12,21 @@ export const tabs = writable<Site[]>([])
 export const profile = writable<string>('')
 export const profiles = writable<string[]>([])
 export const activeTab = writable<Site | null>(HOME)
+
+export const setActionTab = async (e: MouseEvent) => {
+    const button = e.currentTarget as HTMLButtonElement
+    const webview = getCurrent()
+    const isPanel = webview.label == 'panel'
+
+    if (isPanel) {
+        const site = get(tabs).find(({ id }) => id == button.name)
+        site && activeTab.set(site)
+    } else {
+        await emitTo('panel', 'switch_tab', { tab: button.name })
+    }
+
+    await invoke('set_webview_url', { url: button.value })
+}
 
 const addIconsToSites = (sites) => {
     return [HOME, ...sites.map((site) => ({ ...site, ico: genSvg(site.id) }))]

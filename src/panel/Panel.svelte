@@ -1,18 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { invoke } from '@tauri-apps/api/core'
     import { listen } from '@tauri-apps/api/event'
 
-    import { loadData, updateProfile, tabs, activeTab } from '../shared/store'
-
-    async function setActionTab(e: MouseEvent) {
-        const button = e.currentTarget as HTMLButtonElement
-        const site = $tabs.find(({ id }) => id == button.name)
-        if (!site) return
-
-        activeTab.set(site)
-        await invoke('set_webview_url', { url: site.url })
-    }
+    import { loadData, setActionTab, updateProfile, tabs, activeTab } from '../shared/store'
 
     onMount(() => {
         ;(async () => {

@@ -1,16 +1,8 @@
 <script lang="ts">
-    import { invoke } from '@tauri-apps/api/core'
-    import { emitTo } from '@tauri-apps/api/event'
-
+    import { setActionTab } from '../../shared/store'
     import { type Site } from '../../utils/constants'
 
     export let site: Site
-
-    async function setActionTab(e: MouseEvent) {
-        const button = e.currentTarget as HTMLButtonElement
-        await emitTo('panel', 'switch_tab', { tab: button.name })
-        await invoke('set_webview_url', { url: button.value })
-    }
 </script>
 
 <button
