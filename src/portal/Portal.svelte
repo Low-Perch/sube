@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte'
+    import { listen } from '@tauri-apps/api/event'
     import { writable, derived } from 'svelte/store'
 
     import Input from './components/Input.svelte'
@@ -8,7 +9,6 @@
 
     import { isValidAddress } from '../utils/validators'
     import { loadData, activeTab, tabs, updateProfile, profile, profiles } from '../shared/store'
-    import { listen } from '@tauri-apps/api/event'
 
     const search = writable<string>('')
 

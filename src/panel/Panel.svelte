@@ -2,8 +2,8 @@
     import { onMount } from 'svelte'
     import { listen } from '@tauri-apps/api/event'
 
+    import SiteCard from '../shared/components/SiteCard.svelte'
     import { loadData, updateProfile, tabs, activeTab } from '../shared/store'
-    import SiteCard from '../portal/components/SiteCard.svelte'
 
     onMount(() => {
         ;(async () => {

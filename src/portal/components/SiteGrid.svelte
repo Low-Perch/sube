@@ -1,5 +1,5 @@
 <script lang="ts">
-    import SiteCard from './SiteCard.svelte'
+    import SiteCard from '../../shared/components/SiteCard.svelte'
     import { type Site } from '../../utils/constants'
 
     export let sites: Site[]
