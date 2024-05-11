@@ -32,6 +32,10 @@ fn resize_webviews(window: &Window, dimensions: PhysicalSize<u32>, scale_f: f64)
 
 pub fn init(window: &Window, event: &WindowEvent) {
     match event {
+        WindowEvent::CloseRequested { api, .. } => {
+            api.prevent_close();
+            window.hide().unwrap();
+        }
         WindowEvent::Resized(dimensions) => {
             let scale_f = window.scale_factor().unwrap();
             resize_webviews(window, *dimensions, scale_f);
