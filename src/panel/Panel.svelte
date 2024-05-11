@@ -2,7 +2,8 @@
     import { onMount } from 'svelte'
     import { listen } from '@tauri-apps/api/event'
 
-    import { loadData, setActionTab, updateProfile, tabs, activeTab } from '../shared/store'
+    import { loadData, updateProfile, tabs, activeTab } from '../shared/store'
+    import SiteCard from '../portal/components/SiteCard.svelte'
 
     onMount(() => {
         ;(async () => {
@@ -37,23 +38,7 @@
                     class:hidden={site.id != $activeTab.id}
                     class="absolute -left-3 bg-slate-100 h-0.5 w-7 border-none rotate-90"
                 />
-                <button
-                    name={site.id}
-                    value={site.url}
-                    on:click={setActionTab}
-                    class="inline-flex ml-2 justify-center items-center"
-                >
-                    {#if site.ico.startsWith('https')}
-                        <img alt={site.id} class="invert w-5 h-5 bg-transparent" src={site.ico} />
-                    {:else}
-                        <span
-                            class="flex relative -top-2.5 item-center w-5 h-5 text-3xl text-white"
-                        >
-                            {@html site.ico}
-                        </span>
-                    {/if}
-                    <label for={site.id} class="text-xs hidden">{site.id}</label>
-                </button>
+                <SiteCard {site} />
             </li>
         {/each}
     </ul>

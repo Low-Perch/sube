@@ -10,6 +10,6 @@
 
 <div class="flex flex-wrap gap-4 my-10 mx-auto">
     {#each sites as site (site.id)}
-        <SiteCard {site} />
+        <SiteCard {site} portal />
     {/each}
 </div>
