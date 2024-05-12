@@ -5,6 +5,7 @@ use tauri::{
 };
 
 use crate::app::shortcut;
+use crate::app::tray;
 use crate::config::Config;
 
 pub const MAIN: &str = "main";
@@ -118,6 +119,7 @@ pub fn init(app: &mut App) -> Result<(), Box<dyn Error>> {
         window.show().unwrap();
     });
 
+    tray::init(app)?;
     shortcut::init(app)?;
 
     Ok(())
