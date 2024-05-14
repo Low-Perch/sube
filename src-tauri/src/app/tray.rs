@@ -14,21 +14,22 @@ pub fn init(app: &App) -> Result<(), TauriError> {
     let quit = MenuItemBuilder::with_id("quit", "Quit")
         .accelerator("Cmd+Q")
         .build(app)?;
+    let relaunch = MenuItemBuilder::with_id("relanuch", "Relaunch")
+        .accelerator("Cmd+L")
+        .build(app)?;
 
     let menu = MenuBuilder::new(app)
-        .items(&[&show, &hide, &quit])
+        .items(&[&relaunch, &show, &hide, &quit])
         .build()?;
+
     TrayIconBuilder::new()
         .menu(&menu)
-        .on_menu_event(move |app, event| {
-            let window = app.get_window("main").unwrap();
-
-            match event.id().as_ref() {
-                "show" => window.show().unwrap(),
-                "hide" => window.hide().unwrap(),
-                "quit" => std::process::exit(0),
-                _ => {}
-            }
+        .on_menu_event(move |app, event| match event.id().as_ref() {
+            "relaunch" => app.restart(),
+            "show" => app.show().unwrap(),
+            "hide" => app.hide().unwrap(),
+            "quit" => app.exit(0),
+            _ => {}
         })
         .on_tray_icon_event(|tray, event| {
             if event.click_type == ClickType::Left {
