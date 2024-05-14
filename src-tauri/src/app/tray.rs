@@ -22,7 +22,11 @@ pub fn init(app: &App) -> Result<(), TauriError> {
         .items(&[&relaunch, &show, &hide, &quit])
         .build()?;
 
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/icons/128x128@2x.png");
+    let icon = load_icon(std::path::Path::new(path)).unwrap();
+
     TrayIconBuilder::new()
+        .icon(icon)
         .menu(&menu)
         .on_menu_event(move |app, event| match event.id().as_ref() {
             "relaunch" => app.restart(),
@@ -43,4 +47,8 @@ pub fn init(app: &App) -> Result<(), TauriError> {
         .build(app)?;
 
     Ok(())
+}
+
+fn load_icon(path: &std::path::Path) -> Result<tauri::image::Image, tauri::Error> {
+    tauri::image::Image::from_path(path)
 }
